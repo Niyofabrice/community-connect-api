@@ -1,0 +1,27 @@
+[project]
+name = "community-connect"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "celery>=5.6.2",
+    "clamd>=1.0.2",
+    "django>=5.0,<5.1",
+    "django-cors-headers>=4.9.0",
+    "django-extensions>=4.1",
+    "django-filter>=25.1",
+    "django-redis>=6.0.0",
+    "djangorestframework>=3.17.1",
+    "djangorestframework-simplejwt>=5.5.1",
+    "gunicorn>=25.2.0",
+    "imagehash>=4.3.2",
+    "pdf2image>=1.17.0",
+    "pillow>=12.1.1",
+    "psycopg2-binary>=2.9.11",
+    "pytesseract>=0.3.13",
+    "python-decouple>=3.8",
+    "python-magic>=0.4.27",
+    "redis>=7.4.0",
+    "whitenoise>=6.12.0",
+]
