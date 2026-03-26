@@ -9,7 +9,7 @@ class CustomUserAdmin(UserAdmin):
     )
 
     add_fieldsets = UserAdmin.add_fieldsets + (
-        ('Extra Profile Info', {'fields': ('role', 'phone_number')}),
+        ('Extra Profile Info', {'fields': ('role', 'phone_number', 'email')}),
     )
 
     list_display = ('username', 'email', 'role', 'is_staff')
