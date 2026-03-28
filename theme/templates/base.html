@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Community Connect{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    body { background-color: #f4f7f6; }
+    .navbar { box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .status-badge { border-radius: 20px; padding: 0.5em 1em; }
+    .card-lift:hover { transform: translateY(-3px); transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="{% url 'report-list' %}">
+        <i class="bi bi-megaphone-fill me-2"></i>Community Connect
+      </a>
+      <div class="ms-auto d-flex align-items-center">
+        {% if user.is_authenticated %}
+          <span class="text-white me-3 small d-none d-md-inline">Welcome, {{ user.username }}</span>
+          <a href="{% url 'report-create' %}" class="btn btn-light btn-sm me-2">
+            <i class="bi bi-plus-circle me-1"></i>New Report
+          </a>
+          <form action="{% url 'logout' %}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">Login</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <main class="container my-5">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="text-center text-muted py-4 mt-auto border-top">
+    <small>&copy; {% now "Y" %} Community Connect Digital Service Platform</small>
+  </footer>
+</body>
+</html>

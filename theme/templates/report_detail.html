@@ -1,0 +1,25 @@
+<div class="mt-4">
+  <h6>Attachments & Security Scan</h6>
+  <div class="list-group">
+    {% for file in report.attachments.all %}
+    <div class="list-group-item d-flex justify-content-between align-items-center">
+      <div>
+        <i class="bi bi-file-earmark-check me-2"></i>{{ file.file_name }}
+        <div class="small text-muted">Type: {{ file.mime_type }}</div>
+      </div>
+      
+      {% if file.processing_status == 'CLEAN' %}
+        <span class="badge bg-success"><i class="bi bi-shield-check me-1"></i> Verified</span>
+      {% elif file.processing_status == 'SCANNING' %}
+        <span class="badge bg-info text-dark">
+          <span class="spinner-border spinner-border-sm me-1"></span> Scanning...
+        </span>
+      {% elif file.processing_status == 'MALICIOUS' %}
+        <span class="badge bg-danger">Threat Detected</span>
+      {% else %}
+        <span class="badge bg-secondary">Pending Ingest</span>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
