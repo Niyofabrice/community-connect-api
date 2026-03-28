@@ -12,7 +12,16 @@ class User(AbstractUser):
         choices=Role.choices, 
         default=Role.CITIZEN
     )
+    email = models.EmailField(max_length=254, unique=True)
     phone_number = models.CharField(max_length=15, blank=True)
+
+    @property
+    def is_role_admin(self):
+        return self.role == self.Role.ADMIN
+    
+    @property
+    def is_role_staff(self):
+        return self.role == self.Role.STAFF
 
     def __str__(self):
         return f"{self.username} ({self.role})"
