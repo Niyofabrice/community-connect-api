@@ -27,6 +27,7 @@ class Attachment(models.Model):
     processing_status = models.CharField(max_length=20, choices=ProcessingStatus.choices, default=ProcessingStatus.PENDING)
     # OCR results
     extracted_text = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:
         indexes = [
