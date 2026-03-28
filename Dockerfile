@@ -1,6 +1,5 @@
 FROM python:3.13-slim
 
-# set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PATH="/root/.local/bin:$PATH"
@@ -9,10 +8,12 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     gcc \
     curl \
+    # OCR tools
     tesseract-ocr \
     libtesseract-dev \
-    clamav \
-    clamav-daemon \
+    # PDF processing tools
+    poppler-utils \
+    # File identification
     libmagic1 \
     && rm -rf /var/lib/apt/lists/*
 
