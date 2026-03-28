@@ -26,7 +26,12 @@ class Report(models.Model):
         on_delete=models.PROTECT,
         related_name='reports'
     )
-    # Relationship to user: Participants must register and manage accounts [cite: 17]
+    custom_category = models.CharField(
+        max_length=100, 
+        blank=True, 
+        null=True,
+        help_text="User-provided category if 'Other' is selected"
+    )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -44,4 +49,4 @@ class Report(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"Report #{self.id}: {self.title}"
+        return f"Report #{self.category}: {self.title}"
