@@ -23,7 +23,12 @@ class CitizenCreateListView(ListCreateAPIView):
         return [IsStaffOrAdmin()]
     
     def perform_create(self, serializer):
-        return serializer.save(role=User.Role.CITIZEN)
+        return User.objects.create_user(
+            username=serializer.validated_data['username'],
+            email=serializer.validated_data['email'],
+            password=serializer.validated_data['password'],
+            role=User.Role.CITIZEN
+        )
 
 
 class StaffCreateListView(ListCreateAPIView):

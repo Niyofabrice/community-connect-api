@@ -12,15 +12,20 @@ class MyTokenSerializer(TokenObtainPairSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'role', 'date_joined']
+        fields = ['id', 'username', 'email', 'role', 'date_joined', 'password']
         read_only_fields = ['id', 'date_joined', 'role']
 
     def create(self, validated_data):
         """Create and return a new user, ensuring password is hashed"""
-        role = validated_data.pop('role', User.Role.CITIZEN)
+        role = validated_data.pop('role', self.context.get('role', User.Role.CITIZEN))
         user = User.objects.create_user(**validated_data, role=role)
+
+        if 'role' in self.initial_data:
+             user.role = self.initial_data.get('role')
+
         return user
     
     def update(self, instance, validated_data):
