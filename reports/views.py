@@ -1,10 +1,13 @@
 from rest_framework import viewsets, status, filters
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from .models import Report
 from .serializers import ReportSerializer
 from attachments.services import AttachmentService
 from .permissions import IsOwnerOrStaff
 from django_filters.rest_framework import DjangoFilterBackend
+from .models import Category
+from .serializers import CategorySerializer
 
 class ReportViewSet(viewsets.ModelViewSet):
     serializer_class = ReportSerializer
@@ -43,3 +46,9 @@ class ReportViewSet(viewsets.ModelViewSet):
             self.get_serializer(report).data, 
             status=status.HTTP_201_CREATED
         )
+
+
+class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Category.objects.all().order_by('name')
+    serializer_class = CategorySerializer
+    permission_classes = [IsAuthenticated]

@@ -50,3 +50,9 @@ class ReportSerializer(serializers.ModelSerializer):
                     "custom_category": "Please specify your category since you selected 'Other'."
                 })
         return data
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Sequence(serializers.Serializer):
+        class Meta:
+            model = Category
+            fields = ['id', 'name', 'description']

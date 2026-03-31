@@ -7,6 +7,7 @@ requires-python = ">=3.13"
 dependencies = [
     "celery>=5.6.2",
     "clamd>=1.0.2",
+    "dj-database-url>=3.1.2",
     "django>=5.0,<5.1",
     "django-cors-headers>=4.9.0",
     "django-extensions>=4.1",
@@ -14,6 +15,7 @@ dependencies = [
     "django-redis>=6.0.0",
     "djangorestframework>=3.17.1",
     "djangorestframework-simplejwt>=5.5.1",
+    "drf-spectacular>=0.27.0",
     "gunicorn>=25.2.0",
     "imagehash>=4.3.2",
     "pdf2image>=1.17.0",
