@@ -42,6 +42,7 @@ class Report(models.Model):
         choices=Status.choices,
         default=Status.PENDING
     )
+    status_remark = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

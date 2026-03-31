@@ -29,8 +29,6 @@ RUN uv pip install --system .
 
 COPY . .
 
-RUN python manage.py collectstatic --no-input
-
 EXPOSE 8000
 
 CMD ["gunicorn", "core.wsgi:application", \

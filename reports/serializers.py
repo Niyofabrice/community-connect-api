@@ -27,7 +27,7 @@ class ReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report
         fields = [
-            'id', 'title', 'description', 'category', 'status', 
+            'id', 'title', 'description', 'category', 'status', 'status_remark',
             'status_display', 'user', 'user_name', 'attachments', 'created_at'
         ]
         read_only_fields = ['created_at']
