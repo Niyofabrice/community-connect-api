@@ -27,7 +27,7 @@ SECRET_KEY = config('SECRET_KEY', default='placeholder-key-for-build')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
 
 
 # Application definition
@@ -86,11 +86,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT')
+        'NAME': config('DB_NAME', default='dummy'),
+        'USER': config('DB_USER', default='dummy'),
+        'PASSWORD': config('DB_PASSWORD', default='dummy'),
+        'HOST': config('DB_HOST', default='dummy'),
+        'PORT': config('DB_PORT', default='dummy')
     }
 }
 
@@ -185,8 +185,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp-relay.brevo.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='dummy')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='dummy')
 DEFAULT_FROM_EMAIL = f'Community Connect <nf.fabrice.niyonkuru@gmail.com>'
 
 LOGGING = {
