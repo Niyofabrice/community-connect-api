@@ -1,6 +1,5 @@
 from rest_framework import viewsets, status, filters
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from .models import Report
 from .serializers import ReportSerializer
@@ -25,8 +24,9 @@ class ReportViewSet(viewsets.ModelViewSet):
         """
         queryset = Report.objects.all().prefetch_related('attachments', 'category')
         
-        if self.request.user.role == 'CITIZEN':
-            return queryset.filter(user=self.request.user)
+        user = self.request.user
+        if user.is_authenticated and hasattr(user, 'role') and user.role == 'CITIZEN':
+            return queryset.filter(user=user)
         return queryset
 
     def create(self, request, *args, **kwargs):
