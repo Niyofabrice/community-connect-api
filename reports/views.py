@@ -1,6 +1,7 @@
 from rest_framework import viewsets, status, filters
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
 from .models import Report
 from .serializers import ReportSerializer
 from attachments.services import AttachmentService
@@ -46,9 +47,11 @@ class ReportViewSet(viewsets.ModelViewSet):
             self.get_serializer(report).data, 
             status=status.HTTP_201_CREATED
         )
+    
+    @action(detail=False, methods=['get'], url_path='categories')
+    def get_report_categories(self, request):
+        """Retrieve report categories"""
+        categories = Category.objects.all().order_by('name')
+        serializer = CategorySerializer(categories, many=True)
+        return Response(serializer.data)
 
-
-class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Category.objects.all().order_by('name')
-    serializer_class = CategorySerializer
-    permission_classes = [IsAuthenticated]
