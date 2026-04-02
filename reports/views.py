@@ -18,9 +18,9 @@ class ReportViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """
-        Optimized queryset with prefetch for attachments and category
+        Optimized queryset with prefetch for attachments
         """
-        queryset = Report.objects.all().prefetch_related('attachments', 'category')
+        queryset = Report.objects.all().prefetch_related('attachments')
         
         user = self.request.user
         if user.is_authenticated and hasattr(user, 'role') and user.role == 'CITIZEN':
