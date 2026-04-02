@@ -12,6 +12,14 @@ class Category(models.Model):
         return self.name
 
 class Report(models.Model):
+    class Category(models.TextChoices):
+        INFRASTRUCTURE = 'INFRASTRUCTURE', 'Roads & Sidewalks'
+        SANITATION = 'SANITATION', 'Waste & Sanitation'
+        UTILITIES = 'UTILITIES', 'Water & Electricity'
+        ENVIRONMENT = 'ENVIRONMENT', 'Parks & Landscaping'
+        PUBLIC_SAFETY = 'PUBLIC_SAFETY', 'Public Safety'
+        OTHER = 'OTHER', 'Other'
+    
     class Status(models.TextChoices):
         PENDING = 'PENDING', 'Pending'
         IN_REVIEW = 'IN_REVIEW', 'In Review'
@@ -21,10 +29,10 @@ class Report(models.Model):
 
     title = models.CharField(max_length=200)
     description = models.TextField()
-    category = models.ForeignKey(
-        Category,
-        on_delete=models.PROTECT,
-        related_name='reports'
+    category = models.CharField(
+        max_length=50,
+        choices=Category.choices,
+        default=Category.INFRASTRUCTURE
     )
     custom_category = models.CharField(
         max_length=100, 

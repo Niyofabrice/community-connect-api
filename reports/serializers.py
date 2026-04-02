@@ -21,13 +21,14 @@ class AttachmentSerializer(serializers.ModelSerializer):
 class ReportSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     attachments = AttachmentSerializer(many=True, read_only=True)
+    category_display = serializers.CharField(source='get_category_display', read_only=True)
     status_display = serializers.CharField(source='get_status_display', read_only=True)
     user_name = serializers.CharField(source='user.username', read_only=True)
 
     class Meta:
         model = Report
         fields = [
-            'id', 'title', 'description', 'category', 'custom_category', 'status', 'status_remark',
+            'id', 'title', 'description', 'category', 'category_display', 'custom_category', 'status', 'status_remark',
             'status_display', 'user', 'user_name', 'attachments', 'created_at'
         ]
         read_only_fields = ['created_at']
@@ -44,11 +45,14 @@ class ReportSerializer(serializers.ModelSerializer):
         category = data.get('category')
         custom_category = data.get('custom_category')
 
-        if category and category.name.lower() == "other":
-            if not custom_category:
+        if category == Report.Category.OTHER:
+            if not custom_category or len(custom_category.strip()) < 3:
                 raise serializers.ValidationError({
-                    "custom_category": "Please specify your category since you selected 'Other'."
+                    "custom_category": "Please provide a specific category name (at least 3 characters)."
                 })
+        else:
+            data['custom_category'] = None
+
         return data
 
 class CategorySerializer(serializers.ModelSerializer):

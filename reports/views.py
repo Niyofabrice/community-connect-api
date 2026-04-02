@@ -51,7 +51,9 @@ class ReportViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], url_path='categories')
     def get_report_categories(self, request):
         """Retrieve report categories"""
-        categories = Category.objects.all().order_by('name')
-        serializer = CategorySerializer(categories, many=True)
-        return Response(serializer.data)
+        choices = [
+            {"id": key, "name": label} 
+            for key, label in Report.Category.choices
+        ]
+        return Response(choices)
 
