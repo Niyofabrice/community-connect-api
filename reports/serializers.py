@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Report, Category
+from .models import Report
 from attachments.models import Attachment
 
 class AttachmentSerializer(serializers.ModelSerializer):
@@ -54,9 +54,3 @@ class ReportSerializer(serializers.ModelSerializer):
             data['custom_category'] = None
 
         return data
-
-class CategorySerializer(serializers.ModelSerializer):
-    class Sequence(serializers.Serializer):
-        class Meta:
-            model = Category
-            fields = ['id', 'name', 'description']

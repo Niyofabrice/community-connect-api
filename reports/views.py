@@ -6,8 +6,6 @@ from .serializers import ReportSerializer
 from attachments.services import AttachmentService
 from .permissions import IsOwnerOrStaff
 from django_filters.rest_framework import DjangoFilterBackend
-from .models import Category
-from .serializers import CategorySerializer
 
 class ReportViewSet(viewsets.ModelViewSet):
     serializer_class = ReportSerializer
