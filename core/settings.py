@@ -67,7 +67,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'core.urls'
 
-CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS')
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='https://community-connect-api-production.up.railway.app/')
 
 TEMPLATES = [
     {
