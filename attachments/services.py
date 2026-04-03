@@ -46,37 +46,42 @@ class AttachmentService:
         # Check for deduplication
         existing = Attachment.objects.filter(sha256_hash=sha256).first()
 
-        # If it exists, we create a NEW record but reuse the EXISTING file to save disk space
-        file_to_save = existing.file if existing else uploaded_file
-
         phash = None
         if 'image' in mime_type:
             phash = cls.get_perceptual_hash(uploaded_file)
             uploaded_file.seek(0)
 
         try:
-            attachment = Attachment.objects.create(
-                report=report,
-                file=file_to_save,
-                file_name=uploaded_file.name,
-                file_size=uploaded_file.size,
-                sha256_hash=sha256,
-                phash=phash,
-                mime_type=mime_type,
-                processing_status=Attachment.ProcessingStatus.PENDING
-            )
-            logger.info(f"Attachment record created (ID: {attachment.id})")
+            if existing:
+                logger.info(f"Duplicate found. Reusing file: {existing.file.name}")
+                attachment = Attachment.objects.create(
+                    report=report,
+                    file=None,
+                    file_name=uploaded_file.name,
+                    file_size=uploaded_file.size,
+                    sha256_hash=sha256,
+                    phash=phash,
+                    mime_type=mime_type,
+                    processing_status=Attachment.ProcessingStatus.CLEAN if existing.processing_status == Attachment.ProcessingStatus.CLEAN else Attachment.ProcessingStatus.PENDING,
+                    extracted_text=existing.extracted_text
+                )
+                attachment.file.name = existing.file.name
+                attachment.save()
+                return attachment, False
+            else:
+                attachment = Attachment.objects.create(
+                    report=report,
+                    file=uploaded_file,
+                    file_name=uploaded_file.name,
+                    file_size=uploaded_file.size,
+                    sha256_hash=sha256,
+                    phash=phash,
+                    mime_type=mime_type,
+                    processing_status=Attachment.ProcessingStatus.PENDING
+                )
+                logger.info(f"Queueing processing pipeline for attachment {attachment.id}")
+                transaction.on_commit(lambda: process_attachment_pipeline.delay(attachment.id))
+                return attachment, True
         except Exception as e:
             logger.error(f"Failed to create Attachment record: {str(e)}", exc_info=True)
             raise
-
-        if existing and existing.processing_status == Attachment.ProcessingStatus.CLEAN:
-            logger.info(f"Reusing processed data from existing attachment for ID: {attachment.id}")
-            attachment.processing_status = Attachment.ProcessingStatus.CLEAN
-            attachment.extracted_text = existing.extracted_text
-            attachment.save()
-        else:
-            logger.info(f"Queueing processing pipeline for attachment {attachment.id}")
-            transaction.on_commit(lambda: process_attachment_pipeline.delay(attachment.id))
-
-        return attachment, True
