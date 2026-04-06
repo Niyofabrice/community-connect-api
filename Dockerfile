@@ -28,9 +28,6 @@ RUN mkdir -p /app/staticfiles /app/logs
 
 RUN chmod -R 777 /app/logs /app/staticfiles
 
-RUN python manage.py collectstatic --no-input
-
-RUN mkdir -p /app/logs && chmod -R 777 /app/logs /app/staticfiles
 
 EXPOSE 8000
 
